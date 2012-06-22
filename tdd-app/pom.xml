@@ -22,9 +22,21 @@
 	    <scope>test</scope>
 	</dependency>
 	<dependency>
+	    <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+	    <artifactId>selenium-java-client-driver</artifactId>
+	    <version>1.0.1</version>
+	    <scope>test</scope>
+	</dependency>
+	<dependency>
 	    <groupId>org.jmock</groupId>
 	    <artifactId>jmock-junit4</artifactId>
 	    <version>2.5.1</version>
+	    <scope>test</scope>
+	</dependency>
+	<dependency>
+	    <groupId>net.sourceforge.jwebunit</groupId>
+	    <artifactId>jwebunit-htmlunit-plugin</artifactId>
+	    <version>3.0</version>
 	    <scope>test</scope>
 	</dependency>
     </dependencies>
@@ -40,6 +52,51 @@
 		    <target>1.5</target>
 		</configuration>
 	    </plugin>
+	    <plugin>
+		<groupId>org.codehaus.mojo</groupId>
+		<artifactId>selenium-maven-plugin</artifactId>
+		<version>2.3</version>
+		<executions>
+		    <execution>
+			<id>xvfb</id>
+			<phase>pre-integration-test</phase>
+			<goals>
+			    <goal>xvfb</goal>
+			</goals>
+		    </execution>
+
+		    <execution>
+			<id>selenium</id>
+			<phase>pre-integration-test</phase>
+			<goals>
+			    <goal>start-server</goal>
+			</goals>
+			<configuration>
+			    <background>true</background>
+			</configuration>
+		    </execution>
+		</executions>
+	    </plugin>
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Skip the normal tests, we'll run them in the integration-test phase -->
+                    <skip>false</skip>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 	</plugins>
     </build>
 </project>
